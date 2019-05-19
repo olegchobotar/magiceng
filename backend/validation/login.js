@@ -3,7 +3,7 @@ const isEmpty = require('./is-empty');
 
 module.exports = function validateLoginInput(data) {
     let errors = {};
-    data.email = !isEmpty(data.email) ? data.email : '';
+    data.email = !isEmpty(data.email) ? data.email.toLowerCase() : '';
     data.password = !isEmpty(data.password) ? data.password : '';
 
     if(!Validator.isEmail(data.email)) {
