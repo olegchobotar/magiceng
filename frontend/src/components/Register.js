@@ -1,4 +1,13 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
+import { registerUser } from '../actions/authentication';
+import TextField from '@material-ui/core/TextField'
+import Button from '@material-ui/core/Button';
+import classnames from 'classnames';
+
+// import '../forms.css'
 
 class Register extends Component {
 
@@ -29,58 +38,101 @@ class Register extends Component {
             password: this.state.password,
             password_confirm: this.state.password_confirm
         }
-        console.log(user);
+        this.props.registerUser(user, this.props.history);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.auth.isAuthenticated) {
+            this.props.history.push('/')
+        }
+        if(nextProps.errors) {
+            this.setState({
+                errors: nextProps.errors
+            });
+        }
+    }
+
+    componentDidMount() {
+        if(this.props.auth.isAuthenticated) {
+            this.props.history.push('/');
+        }
     }
 
     render() {
+        const { errors } = this.state;
         return(
-            <div className="container" style={{ marginTop: '50px', width: '700px'}}>
-                <h2 style={{marginBottom: '40px'}}>Registration</h2>
+            <div className="container" style={{ marginTop: '50px', width: '600px'}}>
+                <h2 style={{marginBottom: '40px', textAlign: 'center'}}>Sign Up</h2>
                 <form onSubmit={ this.handleSubmit }>
                     <div className="form-group">
-                        <input
+                        <TextField
                             type="text"
-                            placeholder="Name"
-                            className="form-control"
+                            label="Name"
+                            className={classnames('form-control form-control-lg', {
+                                'is-invalid': errors.name
+                            })}
                             name="name"
                             onChange={ this.handleInputChange }
                             value={ this.state.name }
+                            variant="outlined"
                         />
+                        {errors.name && (<div className="invalid-feedback">{errors.name}</div>)}
                     </div>
                     <div className="form-group">
-                        <input
+                        <TextField
                             type="email"
-                            placeholder="Email"
-                            className="form-control"
+                            label="Email"
+                            className={classnames('form-control form-control-lg', {
+                                'is-invalid': errors.email
+                            })}
                             name="email"
                             onChange={ this.handleInputChange }
                             value={ this.state.email }
+                            variant="outlined"
                         />
+                        {errors.email && (<div className="invalid-feedback">{errors.email}</div>)}
                     </div>
                     <div className="form-group">
-                        <input
+                        <TextField
                             type="password"
-                            placeholder="Password"
-                            className="form-control"
+                            label="Password"
+                            className={classnames('form-control form-control-lg', {
+                                'is-invalid': errors.password
+                            })}
                             name="password"
                             onChange={ this.handleInputChange }
                             value={ this.state.password }
+                            variant="outlined"
                         />
+                        {errors.password && (<div className="invalid-feedback">{errors.password}</div>)}
                     </div>
                     <div className="form-group">
-                        <input
+                        <TextField
                             type="password"
-                            placeholder="Confirm Password"
-                            className="form-control"
+                            label="Confirm Password"
+                            className={classnames('form-control form-control-lg', {
+                                'is-invalid': errors.password_confirm
+                            })}
                             name="password_confirm"
                             onChange={ this.handleInputChange }
                             value={ this.state.password_confirm }
+                            variant="outlined"
                         />
+                        {errors.password_confirm && (<div className="invalid-feedback">{errors.password_confirm}</div>)}
                     </div>
                     <div className="form-group">
-                        <button type="submit" className="btn btn-primary">
-                            Register User
-                        </button>
+                        <Button
+                            variant="contained"
+                            style={{width: '100%', height: '50px'}}
+                            color="primary"
+                            type="submit"
+                            className="btn btn-primary">
+                            Sign Up
+                        </Button>
+                    </div>
+                    <div className="form-group" style={{textAlign: 'center'}}>
+                        <span> Already have an account? </span>
+                        <a href="/login">Log In</a>
                     </div>
                 </form>
             </div>
@@ -88,4 +140,14 @@ class Register extends Component {
     }
 }
 
-export default Register;
+Register.propTypes = {
+    registerUser: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    auth: state.auth,
+    errors: state.errors
+});
+
+export default connect(mapStateToProps,{ registerUser })(withRouter(Register))
