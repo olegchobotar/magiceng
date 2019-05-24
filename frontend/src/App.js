@@ -6,14 +6,16 @@ import jwt_decode from 'jwt-decode';
 import setAuthToken from './setAuthToken';
 import { setCurrentUser, logoutUser } from './actions/authentication';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'semantic-ui-css/semantic.min.css';
+import './App.css'
 
 import Header from './components/Header';
 import Register from './components/Register';
 import Login from './components/Login';
 import Home from './components/Home';
-
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css'
+import Sidebar from './components/SidebarAdmin';
+import Dashboard from './pages/dashboard';
 
 if(localStorage.jwtToken) {
     setAuthToken(localStorage.jwtToken);
@@ -35,9 +37,11 @@ class App extends Component {
                     <div>
                         <Header />
                         <Route exact path="/" component={ Home } />
+
                         <div className="container">
                             <Route exact path="/register" component={ Register } />
                             <Route exact path="/login" component={ Login } />
+                            <Route exact path="/dashboard" component={ Dashboard } />
                         </div>
                     </div>
                 </Router>

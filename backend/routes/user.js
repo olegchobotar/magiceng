@@ -7,6 +7,10 @@ const passport = require('passport');
 const validateRegisterInput = require('../validation/register');
 const validateLoginInput = require('../validation/login');
 
+const admins = require('../_helpers/admins');
+
+const roles = require('../_helpers/roles');
+
 const User = require('../models/User');
 
 router.post('/register', function(req, res) {
@@ -23,8 +27,7 @@ router.post('/register', function(req, res) {
             return res.status(400).json({
                 email: 'Email already exists'
             });
-        }
-        else {
+        } else {
             const avatar = gravatar.url(req.body.email, {
                 s: '200',
                 r: 'pg',
@@ -34,7 +37,8 @@ router.post('/register', function(req, res) {
                 name: req.body.name,
                 email: req.body.email,
                 password: req.body.password,
-                avatar
+                avatar,
+                role: admins.includes(req.body.email) ? roles.Admin : roles.User
             });
 
             bcrypt.genSalt(10, (err, salt) => {
@@ -80,7 +84,8 @@ router.post('/login', (req, res) => {
                         const payload = {
                             id: user.id,
                             name: user.name,
-                            avatar: user.avatar
+                            avatar: user.avatar,
+                            role: user.role
                         }
                         jwt.sign(payload, 'secret', {
                             expiresIn: 3600
@@ -89,7 +94,8 @@ router.post('/login', (req, res) => {
                             else {
                                 res.json({
                                     success: true,
-                                    token: `Bearer ${token}`
+                                    token: `Bearer ${token}`,
+                                    isAdmin: user.role === roles.Admin
                                 });
                             }
                         });

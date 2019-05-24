@@ -7,6 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 
 import Button from '@material-ui/core/Button';
+import SidebarAdmin from '../components/SidebarAdmin';
 
 class Header extends Component {
 
@@ -51,19 +52,7 @@ class Header extends Component {
             </Nav>
         );
         return(
-            <div className="navbar-container">
-                <Navbar fixed="top" className="navbar-inner-block mx-auto" expand="md">
-                    <Navbar.Brand href="/">MagicEng.</Navbar.Brand>
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="mr-auto">
-                            <Nav.Link href="/">Daily Program</Nav.Link>
-                        </Nav>
-
-                        {isAuthenticated ? authLinks : guestLinks}
-                    </Navbar.Collapse>
-                </Navbar>
-            </div>
+            <SidebarAdmin user={user} isAuthenticated={isAuthenticated}/>
         )
     }
 }
