@@ -13,6 +13,17 @@ const roles = require('../_helpers/roles');
 
 const User = require('../models/User');
 
+router.get('/all', (req, res) => {
+    User.find({}, function (err, users) {
+        if (err) {
+            res.send('Something went wrong');
+            next();
+        }
+        // res.setHeader('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+        res.header('Access-Control-Expose-Headers', 'X-Total-Count');
+        res.json(users)
+    })
+});
 router.post('/register', function(req, res) {
 
     const { errors, isValid } = validateRegisterInput(req.body);
@@ -88,7 +99,7 @@ router.post('/login', (req, res) => {
                             role: user.role
                         }
                         jwt.sign(payload, 'secret', {
-                            expiresIn: 3600
+                            expiresIn: 36000
                         }, (err, token) => {
                             if(err) console.error('There is some error in token', err);
                             else {

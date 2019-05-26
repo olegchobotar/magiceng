@@ -1,0 +1,9 @@
+.header-image {
+    width: 100%;
+    height: 35vh;
+    object-fit: fill;
+}
+.posts-container {
+    max-width: 1700px;
+    margin: 0 auto;
+}
