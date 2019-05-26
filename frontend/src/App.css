@@ -8,14 +8,11 @@ body{
   color: #dadada;
 }
 .navbar-container {
-  margin-top: 70px;
+  background-color: #1b1c1d;
 }
 
 .navbar-inner-block{
-  height: 70px;
   max-width: 1600px;
-  background-color: #060606;
-
 }
 
 .navbar-inner-block a{
