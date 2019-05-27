@@ -5,7 +5,7 @@ import {
     DisabledInput, LongTextInput, SimpleForm, TextInput, TextField
 } from 'admin-on-rest';
 
-export const WordPostList = (props) => (
+export const AdminWordsList = (props) => (
     <List {...props}>
         <Datagrid>
             <TextField label="ID" source="id" />
@@ -18,23 +18,23 @@ export const WordPostList = (props) => (
 );
 
 
-export const WordPostEdit = (props) => (
+export const AdminWordsEdit = (props) => (
     <Edit {...props}>
         <SimpleForm>
             <DisabledInput source="id" />
             <TextInput source="word" />
-            <TextInput style={{maxWidth: '300px'}} source="translation" />
+            <TextInput source="translation" />
             <TextInput source="imageSrc" />
         </SimpleForm>
     </Edit>
 );
 
-export const WordPostCreate = (props) => (
+export const AdminWordsCreate = (props) => (
     <Create {...props}>
         <SimpleForm>
             <TextInput source="word" />
             <TextInput source="translation" />
-            <TextInput source="imageSrc" />
+            <LongTextInput source="imageSrc" />
         </SimpleForm>
     </Create>
 );

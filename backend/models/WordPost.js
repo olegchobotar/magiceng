@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const WordPostSchema = new Schema({
+
     word: {
         type: String,
         required: true
@@ -17,6 +18,13 @@ const WordPostSchema = new Schema({
     }
 });
 
-const WordPost = mongoose.model('word_posts', WordPostSchema);
+WordPostSchema.method('transform', function() {
+    let obj = this.toObject();
 
-module.exports = WordPost;
+    obj.id = obj._id;
+    delete obj._id;
+
+    return obj;
+});
+
+module.exports = mongoose.model('word_posts', WordPostSchema);

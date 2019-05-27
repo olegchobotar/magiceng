@@ -19,7 +19,7 @@ const useStyles = makeStyles({
     },
 });
 
-function WordCard(props) {
+function WordItemCard(props) {
     const { id, word, translation, imageSrc, audioSrc } = props.value;
     const classes = useStyles();
 
@@ -27,7 +27,7 @@ function WordCard(props) {
     speech.init({
         volume: 0.5,
         lang: "en-US",
-        rate: 1,
+        rate: 0.6,
         pitch: 1,
         voice: 'Google US English'
     }).then((data) => {
@@ -87,4 +87,4 @@ function WordCard(props) {
     );
 }
 
-export default WordCard;
+export default WordItemCard;

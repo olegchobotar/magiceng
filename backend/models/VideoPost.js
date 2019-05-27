@@ -17,6 +17,17 @@ const VideoPostSchema = new Schema({
     }
 });
 
+VideoPostSchema.method('transform', function() {
+    let obj = this.toObject();
+
+    obj.id = obj._id;
+    delete obj._id;
+
+    return obj;
+});
+
+VideoPostSchema.index({'title': 'text', 'description': 'text'});
+
 const VideoPost = mongoose.model('video_posts', VideoPostSchema);
 
 module.exports = VideoPost;

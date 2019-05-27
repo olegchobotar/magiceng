@@ -30,14 +30,18 @@ import {logoutUser} from "../actions/authentication";
 
 import { jsonServerRestClient, Admin, Resource, Delete, MenuItemLink } from 'admin-on-rest';
 
-import { WordPostList, WordPostEdit, WordPostCreate } from '../posts/wordPosts';
-import { VideoPostList, VideoPostEdit, VideoPostCreate } from '../posts/videoPosts';
+import { AdminWordsCreate, AdminWordsEdit, AdminWordsList } from '../posts/admidWordsList';
+import { AdminVideosCreate, AdminVideosEdit, AdminVideosList } from '../posts/adminVideosList';
+import { AdminUsersCreate, AdminUsersEdit, AdminUsersList } from '../posts/adminUsersList';
 
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import Fab from '@material-ui/core/Fab';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import '../App.css'
+import restClient from '../restClient'
+
+
 function MiniDrawer(props) {
     const { user, isAuthenticated } = props;
     const classes = useStyles();
@@ -221,27 +225,7 @@ function MiniDrawer(props) {
 
             </main>
         </Fragment>
-    )
-
-    // const convertHTTPResponseToREST = (response, type, resource, params) => {
-    //     const { headers, json } = response;
-    //     switch (type) {
-    //         case 'GET_LIST':
-    //             return {
-    //                 data: json.map(resource => {...resource, id: resource._id
-    //                 }),
-    //                 total: parseInt(headers.get('content-range').split('/').pop(), 10),
-    //             };
-    //         case 'UPDATE':
-    //         case 'DELETE':
-    //         case 'GET_ONE':
-    //             return { ...json, id: json._id };
-    //         case 'CREATE':
-    //             return { ...params.data, id: json._id };
-    //         default:
-    //             return json;
-    //     }
-    // };
+    );
 
     const admin = (
         <Fragment>
@@ -251,17 +235,27 @@ function MiniDrawer(props) {
                 <Resource
                     name="words"
                     icon={Class}
-                    list={WordPostList}
-                    edit={WordPostEdit}
-                    create={WordPostCreate}
-                    remove={Delete}/>
+                    list={AdminWordsList}
+                    edit={AdminWordsEdit}
+                    create={AdminWordsCreate}
+                    remove={Delete}
+                />
                 <Resource
                     name="videos"
                     icon={Videocam}
-                    list={VideoPostList}
-                    edit={VideoPostEdit}
-                    create={VideoPostCreate}
-                    remove={Delete}/>
+                    list={AdminVideosList}
+                    edit={AdminVideosEdit}
+                    create={AdminVideosCreate}
+                    remove={Delete}
+                />
+                <Resource
+                    name="users"
+                    icon={Videocam}
+                    list={AdminUsersList}
+                    edit={AdminUsersEdit}
+                    create={AdminUsersCreate}
+                    remove={Delete}
+                />
             </Admin>
             <Tooltip
                 title="Exit"

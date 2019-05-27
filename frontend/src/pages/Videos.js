@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
-import VideoCard from '../components/VideoCard';
+import VideoCard from '../components/VideoCard.js';
 
 import Grid from '@material-ui/core/Grid';
 
@@ -38,16 +38,15 @@ export default class VideosComponent extends Component {
                 <div className="posts-container">
                     <h1>Words</h1>
                     <Grid
-                        justify="center"
                         container
                         spacing={3}>
                         {error ? <p>{error.message}</p> : null}
                         {!isLoading ? (
                             wordPosts.map(wordPost => {
-                                const { _id } = wordPost;
+                                const { id } = wordPost;
                                 return (
-                                    <Grid item xs={6} md={4} lg={3} key={_id}>
-                                        {/*<VideoCard value={wordPost}/>*/}
+                                    <Grid item xs={6} md={4} lg={6} key={id}>
+                                        <VideoCard value={wordPost}/>
                                     </Grid>
                                 );
                             })

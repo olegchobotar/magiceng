@@ -18,13 +18,22 @@ const UserSchema = new Schema({
     avatar: {
         type: String
     },
-    date: {
+    registrationDate: {
         type: Date,
         default: Date.now
     },
     role: {
         type: String
     }
+});
+
+UserSchema.method('transform', function() {
+    let obj = this.toObject();
+
+    obj.id = obj._id;
+    delete obj._id;
+
+    return obj;
 });
 
 const User = mongoose.model('users', UserSchema);

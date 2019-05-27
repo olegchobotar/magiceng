@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
-import WordCard from '../components/WordCard';
+import WordItemCard from '../components/WordItemCard';
 
 import Grid from '@material-ui/core/Grid';
 
@@ -47,7 +47,7 @@ export default class WordsComponent extends Component {
                                 const { id } = videoPost;
                                 return (
                                     <Grid item xs={6} md={4} lg={3} key={id}>
-                                       <WordCard value={videoPost}/>
+                                       <WordItemCard value={videoPost}/>
                                     </Grid>
                                 );
                             })

@@ -13,17 +13,41 @@ const roles = require('../_helpers/roles');
 
 const User = require('../models/User');
 
-router.get('/all', (req, res) => {
+router.get('/', (req, res) => {
     User.find({}, function (err, users) {
         if (err) {
             res.send('Something went wrong');
             next();
         }
-        // res.setHeader('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-        res.header('Access-Control-Expose-Headers', 'X-Total-Count');
-        res.json(users)
+        let returnedUsers = [];
+        for (let i = 0; i < users.length; i++) {
+            returnedUsers.push(users[i].transform());
+        }
+        res.writeHead(200, {"X-Total-Count": "10"});
+        res.end(JSON.stringify(returnedUsers));
     })
 });
+
+router.get('/:id', (req, res) => {
+    User.findById(req.params.id, (err, videoPost) => {
+        if (err) res.status(500).send(error)
+        res.status(200).json(videoPost.transform());
+    });
+});
+
+router.put('/:id', (req, res) => (
+
+    User.findByIdAndUpdate (
+        req.params.id,
+        req.body,
+        {new: true},
+        (err, todo) => {
+            if (err) return res.status(500).send(err);
+            return res.send(todo);
+        }
+    )
+));
+
 router.post('/register', function(req, res) {
 
     const { errors, isValid } = validateRegisterInput(req.body);
@@ -95,6 +119,7 @@ router.post('/login', (req, res) => {
                         const payload = {
                             id: user.id,
                             name: user.name,
+                            email: user.email,
                             avatar: user.avatar,
                             role: user.role
                         }

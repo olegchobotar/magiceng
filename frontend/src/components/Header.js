@@ -24,14 +24,14 @@ class Header extends Component {
                 <NavDropdown
                     className="header-dropdown"
                     title={
-                    <img src={user.avatar} alt={user.name} title={user.name}
-                         className="rounded-circle"
-                         style={{
-                             width: '35px',
-                             marginRight: '5px',
-                             border: "2px solid silver"
-                         }} />
-                }>
+                        <img src={user.avatar} alt={user.name} title={user.name}
+                             className="rounded-circle"
+                             style={{
+                                 width: '35px',
+                                 marginRight: '5px',
+                                 border: "2px solid silver"
+                             }} />
+                    }>
                     <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
                     <NavDropdown.Item href="/settings">Settings</NavDropdown.Item>
                     <NavDropdown.Divider />
