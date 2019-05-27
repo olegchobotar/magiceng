@@ -38,6 +38,9 @@ import Fab from '@material-ui/core/Fab';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import '../App.css'
+import restClient from '../restClient'
+
+
 function MiniDrawer(props) {
     const { user, isAuthenticated } = props;
     const classes = useStyles();
@@ -222,26 +225,33 @@ function MiniDrawer(props) {
             </main>
         </Fragment>
     )
+    //
+    const convertHTTPResponseToREST = (response, type, resource, params) => {
+        const { headers, json } = response;
+        switch (type) {
+            case 'GET_LIST':
+                return {
+                    data: json.map(resource => ({...resource, id: resource._id
+                    })),
+                    total: parseInt(headers.get('content-range').split('/').pop(), 10),
+                };
+            case 'UPDATE':
+            case 'DELETE':
+            case 'GET_ONE':
+                return { ...json, id: json._id };
+            case 'CREATE':
+                return { ...params.data, id: json._id };
+            default:
+                return json;
+        }
+    };
+    //
+    // restClient('GET_LIST', 'words', {
+    //     pagination: { page: 1, perPage: 5 },
+    //     sort: { field: 'word', order: 'ASC' }
+    // })
+    //     .then(response => console.log(convertHTTPResponseToREST(response)));
 
-    // const convertHTTPResponseToREST = (response, type, resource, params) => {
-    //     const { headers, json } = response;
-    //     switch (type) {
-    //         case 'GET_LIST':
-    //             return {
-    //                 data: json.map(resource => {...resource, id: resource._id
-    //                 }),
-    //                 total: parseInt(headers.get('content-range').split('/').pop(), 10),
-    //             };
-    //         case 'UPDATE':
-    //         case 'DELETE':
-    //         case 'GET_ONE':
-    //             return { ...json, id: json._id };
-    //         case 'CREATE':
-    //             return { ...params.data, id: json._id };
-    //         default:
-    //             return json;
-    //     }
-    // };
 
     const admin = (
         <Fragment>

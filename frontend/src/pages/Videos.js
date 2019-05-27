@@ -4,6 +4,7 @@ import axios from 'axios';
 import VideoCard from '../components/VideoCard';
 
 import Grid from '@material-ui/core/Grid';
+import store from '../store';
 
 import '../words-page.css';
 
@@ -15,6 +16,8 @@ export default class VideosComponent extends Component {
     };
 
     componentDidMount() {
+        this.unsubscribeStore = store.subscribe();
+
         axios.get('/api/videos')
             .then(res => {
                 this.setState({
@@ -24,6 +27,11 @@ export default class VideosComponent extends Component {
             })
             .catch(error => this.setState({ error, isLoading: false }));
     }
+
+    componentWillUnmount() {
+        this.unsubscribeStore();
+    }
+
     render() {
 
         const { isLoading, wordPosts, error } = this.state;
@@ -44,10 +52,10 @@ export default class VideosComponent extends Component {
                         {error ? <p>{error.message}</p> : null}
                         {!isLoading ? (
                             wordPosts.map(wordPost => {
-                                const { _id } = wordPost;
+                                const { id } = wordPost;
                                 return (
-                                    <Grid item xs={6} md={4} lg={3} key={_id}>
-                                        {/*<VideoCard value={wordPost}/>*/}
+                                    <Grid item xs={6} md={4} lg={3} key={id}>
+                                        <VideoCard value={wordPost}/>
                                     </Grid>
                                 );
                             })
