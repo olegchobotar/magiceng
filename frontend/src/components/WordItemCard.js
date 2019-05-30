@@ -7,7 +7,10 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Speech from 'speak-tts'
+import Speech from 'speak-tts';
+import axios from 'axios';
+
+import StarBorder from '@material-ui/icons/StarBorder';
 
 const useStyles = makeStyles({
     card: {
@@ -20,7 +23,9 @@ const useStyles = makeStyles({
 });
 
 function WordItemCard(props) {
-    const { id, word, translation, imageSrc, audioSrc } = props.value;
+    const { id, word, translation, imageSrc } = props.value;
+    const { userId} = props;
+
     const classes = useStyles();
 
     const speech = new Speech();
@@ -45,16 +50,36 @@ function WordItemCard(props) {
         });
     }
 
+    function favoriteHandler() {
+        const card = {
+            userId: userId,
+            cardId: id
+        };
+        console.log(card);
+
+        axios.post('/api/favorite-cards', card)
+            .then(res => {
+                console.log(res);
+            })
+    }
+
     return (
         <Card className={classes.card}>
             <CardActionArea
                 onClick={speak}
+
             >
                 <CardMedia
                     className={classes.media}
                     image={imageSrc}
                     title={word}
-                />
+                >
+                    <StarBorder
+                        className="favorite-icon"
+                        style={{ fontSize: '30px' }}
+                        onClick={favoriteHandler}
+                    />
+                </CardMedia>
                 <CardContent>
                     <Typography
                         gutterBottom

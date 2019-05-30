@@ -1,0 +1,24 @@
+const mongoose = require('mongoose');
+
+const Schema = mongoose.Schema;
+
+const WordCategorySchema = new Schema({
+    categoryName: {
+        type: String,
+        required: true
+    }
+});
+
+WordCategorySchema.method('transform', function() {
+    let obj = this.toObject();
+
+    obj.id = obj._id;
+    delete obj._id;
+
+    return obj;
+});
+
+
+const WordCategory = mongoose.model('word_categories', WordCategorySchema);
+
+module.exports = WordCategory;

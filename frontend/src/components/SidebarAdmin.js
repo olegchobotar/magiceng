@@ -33,6 +33,8 @@ import { jsonServerRestClient, Admin, Resource, Delete, MenuItemLink } from 'adm
 import { AdminWordsCreate, AdminWordsEdit, AdminWordsList } from '../posts/admidWordsList';
 import { AdminVideosCreate, AdminVideosEdit, AdminVideosList } from '../posts/adminVideosList';
 import { AdminUsersCreate, AdminUsersEdit, AdminUsersList } from '../posts/adminUsersList';
+import { AdminVideoCategoriesCreate, AdminVideoCategoriesEdit, AdminVideoCategoriesList } from '../posts/adminVideoCategoryList';
+import { AdminWordCategoriesCreate, AdminWordCategoriesEdit, AdminWordCategoriesList } from '../posts/adminWordCategoryList';
 
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import Fab from '@material-ui/core/Fab';
@@ -233,11 +235,29 @@ function MiniDrawer(props) {
                 title="Dashboard"
                 restClient={jsonServerRestClient('/api')}>
                 <Resource
+                    name="word-categories"
+                    options={{ label: 'Word Categories' }}
+                    icon={Class}
+                    list={AdminWordCategoriesList}
+                    edit={AdminWordCategoriesEdit}
+                    create={AdminWordCategoriesCreate}
+                    remove={Delete}
+                />
+                <Resource
                     name="words"
                     icon={Class}
                     list={AdminWordsList}
                     edit={AdminWordsEdit}
                     create={AdminWordsCreate}
+                    remove={Delete}
+                />
+                <Resource
+                    name="video-categories"
+                    options={{ label: 'Video Categories' }}
+                    icon={Class}
+                    list={AdminVideoCategoriesList}
+                    edit={AdminVideoCategoriesEdit}
+                    create={AdminVideoCategoriesCreate}
                     remove={Delete}
                 />
                 <Resource

@@ -2,32 +2,32 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 
-const WordPosts = require('../models/WordPost');
+const VideoCategories = require('../models/VideoCategory');
 
 router.get('/', (req, res) => {
-    WordPosts.find({}, function (err, wordPost) {
+    VideoCategories.find({}, function (err, videoCategory) {
         if (err) {
             res.send('Something went wrong');
             next();
         }
-        let returnedWords = [];
-        for (let i = 0; i < wordPost.length; i++) {
-            returnedWords.push(wordPost[i].transform());
+        let returnedCategories = [];
+        for (let i = 0; i < videoCategory.length; i++) {
+            returnedCategories.push(videoCategory[i].transform());
         }
         res.writeHead(200, {"X-Total-Count": "10"});
-        res.end(JSON.stringify(returnedWords));
+        res.end(JSON.stringify(returnedCategories));
     })
 });
 
 router.get('/:id', (req, res) => {
-    WordPosts.findById(req.params.id, (err, wordPost) => {
+    VideoCategories.findById(req.params.id, (err, wordPost) => {
         if (err) res.status(500).send(error);
         res.status(200).json(wordPost.transform());
     });
 });
 
 router.get('/find/:word', (req, res) => {
-    WordPosts.find({ "word": { "$regex": req.params.word, "$options": "i" } } , (err, data) => {
+    VideoCategories.find({ "categoryName": { "$regex": req.params.word, "$options": "i" } } , (err, data) => {
         if (err) return res.send(err);
         return res.send(data);
     });
@@ -35,7 +35,7 @@ router.get('/find/:word', (req, res) => {
 
 router.put('/:id', (req, res) => (
 
-    WordPosts.findByIdAndUpdate (
+    VideoCategories.findByIdAndUpdate (
         req.params.id,
         req.body,
         {new: true},
@@ -47,22 +47,20 @@ router.put('/:id', (req, res) => (
 ));
 
 router.delete('/:id', (req, res, next) => {
-    return WordPosts.findByIdAndRemove(req.params.id)
+    return VideoCategories.findByIdAndRemove(req.params.id)
         .then(() => res.sendStatus(200))
         .catch(next);
 });
 
 router.post('/', (req, res) => {
 
-    const newWordPost = new WordPosts({
-        word: req.body.word,
-        translation: req.body.translation,
-        imageSrc: req.body.imageSrc
+    const newVideoCategory = new VideoCategories({
+        categoryName: req.body.categoryName,
     });
-    newWordPost
+    newVideoCategory
         .save()
-        .then(wordPost => {
-            res.json(wordPost.transform())
+        .then(videoCategory => {
+            res.json(videoCategory.transform());
         });
 });
 

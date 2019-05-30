@@ -7,6 +7,9 @@ const config = require('./db');
 const users = require('./routes/user');
 const wordPost = require('./routes/wordPosts');
 const videoPost = require('./routes/videoPosts');
+const videoCategories = require('./routes/videoCategories');
+const wordCategories = require('./routes/wordCategories');
+const favoriteCards = require('./routes/favoriteCards');
 
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
     () => {console.log('Database is connected') },
@@ -23,6 +26,9 @@ app.use(bodyParser.json());
 app.use('/api/users', users);
 app.use('/api/words', wordPost);
 app.use('/api/videos', videoPost);
+app.use('/api/video-categories', videoCategories);
+app.use('/api/word-categories', wordCategories);
+app.use('/api/favorite-cards', favoriteCards);
 
 app.get('/', function(req, res) {
     res.send('hello');

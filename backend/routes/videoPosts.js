@@ -21,10 +21,9 @@ router.get('/', (req, res) => {
 });
 
 router.get('/find/:word', (req, res) => {
-    VideoPost.find({$text: /.*b.*/}, (err, data) => {
-        console.log(req.params.word);
+    VideoPost.find({ "title": { "$regex": req.params.word, "$options": "i" } } , (err, data) => {
             if (err) return res.send(err)
-            return res.send(data)
+            return res.send(data.transform());
         });
 });
 
@@ -58,11 +57,10 @@ router.post('/', (req, res) => {
         link: req.body.link,
     });
 
-    console.log(newVideoPost);
     newVideoPost
         .save()
-        .then(wordPost => {
-            res.json(wordPost.transform())
+        .then(videoPost => {
+            res.json(videoPost.transform())
         });
 });
 

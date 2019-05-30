@@ -11,6 +11,9 @@ const VideoPostSchema = new Schema({
         type: String,
         required: true
     },
+    category: {
+        type: String
+    },
     link: {
         type: String,
         required: true

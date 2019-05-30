@@ -12,6 +12,9 @@ const WordPostSchema = new Schema({
         type: String,
         required: true
     },
+    category: {
+        type: String
+    },
     imageSrc: {
         type: String,
         required: true

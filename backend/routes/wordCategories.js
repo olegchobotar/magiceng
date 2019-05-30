@@ -2,32 +2,32 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 
-const WordPosts = require('../models/WordPost');
+const WordCategories = require('../models/WordCategory');
 
 router.get('/', (req, res) => {
-    WordPosts.find({}, function (err, wordPost) {
+    WordCategories.find({}, function (err, wordCategory) {
         if (err) {
             res.send('Something went wrong');
             next();
         }
-        let returnedWords = [];
-        for (let i = 0; i < wordPost.length; i++) {
-            returnedWords.push(wordPost[i].transform());
+        let returnedCategories = [];
+        for (let i = 0; i < wordCategory.length; i++) {
+            returnedCategories.push(wordCategory[i].transform());
         }
         res.writeHead(200, {"X-Total-Count": "10"});
-        res.end(JSON.stringify(returnedWords));
+        res.end(JSON.stringify(returnedCategories));
     })
 });
 
 router.get('/:id', (req, res) => {
-    WordPosts.findById(req.params.id, (err, wordPost) => {
+    WordCategories.findById(req.params.id, (err, wordPost) => {
         if (err) res.status(500).send(error);
         res.status(200).json(wordPost.transform());
     });
 });
 
 router.get('/find/:word', (req, res) => {
-    WordPosts.find({ "word": { "$regex": req.params.word, "$options": "i" } } , (err, data) => {
+    WordCategories.find({ "categoryName": { "$regex": req.params.word, "$options": "i" } } , (err, data) => {
         if (err) return res.send(err);
         return res.send(data);
     });
@@ -35,7 +35,7 @@ router.get('/find/:word', (req, res) => {
 
 router.put('/:id', (req, res) => (
 
-    WordPosts.findByIdAndUpdate (
+    WordCategories.findByIdAndUpdate (
         req.params.id,
         req.body,
         {new: true},
@@ -47,22 +47,20 @@ router.put('/:id', (req, res) => (
 ));
 
 router.delete('/:id', (req, res, next) => {
-    return WordPosts.findByIdAndRemove(req.params.id)
+    return WordCategories.findByIdAndRemove(req.params.id)
         .then(() => res.sendStatus(200))
         .catch(next);
 });
 
 router.post('/', (req, res) => {
 
-    const newWordPost = new WordPosts({
-        word: req.body.word,
-        translation: req.body.translation,
-        imageSrc: req.body.imageSrc
+    const newWordCategory = new WordCategories({
+        categoryName: req.body.categoryName,
     });
-    newWordPost
+    newWordCategory
         .save()
-        .then(wordPost => {
-            res.json(wordPost.transform())
+        .then(wordCategory => {
+            res.json(wordCategory.transform());
         });
 });
 

@@ -7,3 +7,14 @@
     max-width: 1700px;
     margin: 0 auto;
 }
+
+.search-block {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.favorite-icon {
+    float: right;
+    margin: 20px;
+    font-size: 40px;
+}
