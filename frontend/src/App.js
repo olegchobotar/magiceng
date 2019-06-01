@@ -18,6 +18,7 @@ import Profile from './pages/Profile';
 import Videos from './pages/Videos';
 import Words from './pages/Words';
 import CardFavorite from './pages/CardFavorite';
+import CardGame from './pages/CardGame';
 
 if(localStorage.jwtToken) {
     setAuthToken(localStorage.jwtToken);
@@ -48,6 +49,7 @@ class App extends Component {
                                 <Route exact path="/words" component={ Words } />
                                 <Route exact path="/profile" component={ Profile } />
                                 <Route exact path="/favorite" component={ CardFavorite } />
+                                <Route exact path="/card-game" component={ CardGame } />
                             </div>
                         </div>
                     </Router>

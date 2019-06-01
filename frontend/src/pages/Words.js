@@ -149,8 +149,12 @@ class WordsComponent extends Component {
                                         xs={12}
                                         md={4}
                                         lg={3}
-                                        key={_id}>
-                                       <WordItemCard favoriteCards={favoriteCards} value={wordPost} userId={user.id}/>
+                                    >
+                                       <WordItemCard
+                                           key={_id + 'card'}
+                                           favoriteCards = {favoriteCards}
+                                           value={wordPost}
+                                           userId={user.id}/>
                                     </Grid>
                                 );
                             })

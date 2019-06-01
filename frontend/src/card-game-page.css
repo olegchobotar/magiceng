@@ -1,0 +1,19 @@
+.card-game-title {
+    text-align: center;
+    color: #1b1c1d;
+    margin-top: 40px;
+    font-size: 32pt;
+}
+
+.card-game-canvas img{
+    max-width: 330px;
+}
+
+.variations-button-container {
+    margin: 20px auto;
+    text-align: center;
+}
+
+.card-game-header {
+    text-align: center;
+}
