@@ -18,6 +18,17 @@ WordCategorySchema.method('transform', function() {
     return obj;
 });
 
+WordCategorySchema.method('simpleForm', function() {
+    let obj = this.toObject();
+
+    obj.id = obj.categoryName;
+    obj.name = obj.categoryName;
+    delete obj.categoryName;
+    delete obj._id;
+
+    return obj;
+});
+
 
 const WordCategory = mongoose.model('word_categories', WordCategorySchema);
 

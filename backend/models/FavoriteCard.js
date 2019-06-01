@@ -10,7 +10,11 @@ const FavoriteCardSchema = new Schema({
     cardId: {
         type: String,
         required: true
-    }
+    },
+    card:  {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'word_posts'
+    },
 });
 
 

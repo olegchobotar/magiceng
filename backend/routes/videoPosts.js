@@ -23,8 +23,20 @@ router.get('/', (req, res) => {
 router.get('/find/:word', (req, res) => {
     VideoPost.find({ "title": { "$regex": req.params.word, "$options": "i" } } , (err, data) => {
             if (err) return res.send(err)
-            return res.send(data.transform());
+        console.log(data);
+            return res.send(data);
         });
+});
+
+router.get('/find-by-category/:category', (req, res) => {
+    VideoPost.find({ "category": req.params.category} , (err, videoPost) => {
+        if (err) return res.send(err);
+        let returnedWords = [];
+        for (let i = 0; i < videoPost.length; i++) {
+            returnedWords.push(videoPost[i].transform());
+        }
+        return res.send(returnedWords);
+    });
 });
 
 router.get('/:id', (req, res) => {

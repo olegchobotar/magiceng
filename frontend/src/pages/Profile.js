@@ -1,17 +1,10 @@
 import React, { Component } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import axios from 'axios';
-import WordItemCard from '../components/WordItemCard';
 import { logoutUser } from '../actions/authentication';
-import {Link, withRouter} from 'react-router-dom';
-
-import Grid from '@material-ui/core/Grid';
-
+import { withRouter} from 'react-router-dom';
 
 import '../words-page.css';
-import store from '../store';
 import {connect} from "react-redux";
-import Button from "../components/Home";
 
 class Profile extends Component {
 

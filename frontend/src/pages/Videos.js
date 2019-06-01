@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
 import VideoCard from '../components/VideoCard.js';
 
@@ -7,6 +6,11 @@ import Grid from '@material-ui/core/Grid';
 
 import '../words-page.css';
 import TextField from '@material-ui/core/TextField'
+
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
 
 export default class VideosComponent extends Component {
     constructor() {
@@ -17,7 +21,9 @@ export default class VideosComponent extends Component {
     state = {
         isLoading: true,
         videoPosts: [],
-        error: null
+        categories: [],
+        error: null,
+        category: ''
     };
 
     componentDidMount() {
@@ -26,6 +32,14 @@ export default class VideosComponent extends Component {
                 this.setState({
                     isLoading: false,
                     videoPosts: res.data
+                });
+            })
+            .catch(error => this.setState({ error, isLoading: false }));
+
+        axios.get('/api/video-categories/all')
+            .then(res => {
+                this.setState({
+                    categories: res.data
                 });
             })
             .catch(error => this.setState({ error, isLoading: false }));
@@ -41,9 +55,24 @@ export default class VideosComponent extends Component {
             })
             .catch(error => this.setState({ error, isLoading: false }));
     }
+
+    handleCategoryChange(value) {
+        this.setState({
+            category: value
+        });
+
+        const api = value ? '/api/videos/find-by-category/' + value : '/api/videos';
+        axios.get(api)
+            .then(res => {
+                this.setState({
+                    videoPosts: res.data
+                });
+            })
+            .catch(error => this.setState({ error, isLoading: false }));
+    }
     render() {
 
-        const { isLoading, videoPosts, error } = this.state;
+        const { isLoading, videoPosts, error, categories, category } = this.state;
 
         const main = (
             <div>
@@ -55,6 +84,29 @@ export default class VideosComponent extends Component {
                 <div
                     className="search-block"
                 >
+                    <FormControl
+                        style={{minWidth: '150px', margin: '9px'}}
+                    >
+                        <InputLabel htmlFor="category-label">Category</InputLabel>
+                        <Select
+                            value={category}
+                            onChange={event => this.handleCategoryChange(event.target.value)}
+                            name="age"
+                            inputProps={{
+                                name: 'category',
+                                id: 'category-label',
+                            }}
+                        >
+                            <MenuItem value="">
+                                <em>All</em>
+                            </MenuItem>
+                            { categories.map(category => {
+                                return (
+                                    <MenuItem value={category.name}>{category.name}</MenuItem>
+                                );
+                            })}
+                        </Select>
+                    </FormControl>
                     <TextField
                         type="text"
                         label="Search"
@@ -63,17 +115,19 @@ export default class VideosComponent extends Component {
                         variant="outlined"
                     />
                 </div>
-                <div className="posts-container">
+                <div className="videos-container">
                     <h1>Videos</h1>
                     <Grid
+                        alignItems="center"
+                        justify="center"
                         container
                         spacing={3}>
                         {error ? <p>{error.message}</p> : null}
                         {!isLoading ? (
                             videoPosts.map(videoPost => {
-                                const { _id } = videoPost;
+                                const id = videoPost.id ? videoPost.id : videoPost._id;
                                 return (
-                                    <Grid item xs={6} md={4} lg={6} key={_id}>
+                                    <Grid item xs={6} md={4} lg={6} key={id}>
                                         <VideoCard value={videoPost}/>
                                     </Grid>
                                 );

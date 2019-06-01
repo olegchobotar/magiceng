@@ -18,6 +18,16 @@ VideoCategorySchema.method('transform', function() {
     return obj;
 });
 
+VideoCategorySchema.method('simpleForm', function() {
+    let obj = this.toObject();
+
+    obj.id = obj.categoryName;
+    obj.name = obj.categoryName;
+    delete obj.categoryName;
+    delete obj._id;
+
+    return obj;
+});
 
 const VideoCategory = mongoose.model('video_categories', VideoCategorySchema);
 

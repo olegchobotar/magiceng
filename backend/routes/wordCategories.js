@@ -4,6 +4,21 @@ const bcrypt = require('bcryptjs');
 
 const WordCategories = require('../models/WordCategory');
 
+router.get('/all', (req, res) => {
+    WordCategories.find({}, function (err, wordCategory) {
+        if (err) {
+            res.send('Something went wrong');
+            next();
+        }
+        let returnedCategories = [];
+        for (let i = 0; i < wordCategory.length; i++) {
+            returnedCategories.push(wordCategory[i].simpleForm());
+        }
+        res.writeHead(200, {"X-Total-Count": "10"});
+        res.end(JSON.stringify(returnedCategories));
+    })
+});
+
 router.get('/', (req, res) => {
     WordCategories.find({}, function (err, wordCategory) {
         if (err) {

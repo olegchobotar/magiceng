@@ -4,6 +4,21 @@ const bcrypt = require('bcryptjs');
 
 const VideoCategories = require('../models/VideoCategory');
 
+router.get('/all', (req, res) => {
+    VideoCategories.find({}, function (err, videoCategory) {
+        if (err) {
+            res.send('Something went wrong');
+            next();
+        }
+        let returnedCategories = [];
+        for (let i = 0; i < videoCategory.length; i++) {
+            returnedCategories.push(videoCategory[i].simpleForm());
+        }
+        res.writeHead(200, {"X-Total-Count": "10"});
+        res.end(JSON.stringify(returnedCategories));
+    })
+});
+
 router.get('/', (req, res) => {
     VideoCategories.find({}, function (err, videoCategory) {
         if (err) {
@@ -13,6 +28,21 @@ router.get('/', (req, res) => {
         let returnedCategories = [];
         for (let i = 0; i < videoCategory.length; i++) {
             returnedCategories.push(videoCategory[i].transform());
+        }
+        res.writeHead(200, {"X-Total-Count": "10"});
+        res.end(JSON.stringify(returnedCategories));
+    })
+});
+
+router.get('/edit', (req, res) => {
+    VideoCategories.find({}, function (err, videoCategory) {
+        if (err) {
+            res.send('Something went wrong');
+            next();
+        }
+        let returnedCategories = [];
+        for (let i = 0; i < videoCategory.length; i++) {
+            returnedCategories.push(videoCategory[i].simpleForm());
         }
         res.writeHead(200, {"X-Total-Count": "10"});
         res.end(JSON.stringify(returnedCategories));

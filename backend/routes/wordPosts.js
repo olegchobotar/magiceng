@@ -27,9 +27,24 @@ router.get('/:id', (req, res) => {
 });
 
 router.get('/find/:word', (req, res) => {
-    WordPosts.find({ "word": { "$regex": req.params.word, "$options": "i" } } , (err, data) => {
+    WordPosts.find({ "word": { "$regex": req.params.word, "$options": "i" } } , (err, wordPost) => {
         if (err) return res.send(err);
-        return res.send(data);
+        let returnedWords = [];
+        for (let i = 0; i < wordPost.length; i++) {
+            returnedWords.push(wordPost[i].transform());
+        }
+        return res.send(returnedWords);
+    });
+});
+
+router.get('/find-by-category/:category', (req, res) => {
+    WordPosts.find({ "category": req.params.category} , (err, wordPost) => {
+        if (err) return res.send(err);
+        let returnedWords = [];
+        for (let i = 0; i < wordPost.length; i++) {
+            returnedWords.push(wordPost[i].transform());
+        }
+        return res.send(returnedWords);
     });
 });
 

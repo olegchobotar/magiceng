@@ -9,8 +9,12 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Speech from 'speak-tts';
 import axios from 'axios';
+import { SET_FAVORITE_CARDS } from '../actions/types';
 
 import StarBorder from '@material-ui/icons/StarBorder';
+import {connect} from "react-redux";
+import store from '../store';
+import PropTypes from "prop-types";
 
 const useStyles = makeStyles({
     card: {
@@ -23,7 +27,12 @@ const useStyles = makeStyles({
 });
 
 function WordItemCard(props) {
-    const { id, word, translation, imageSrc } = props.value;
+    const { favoriteCards } = props;
+
+    const { word, translation, imageSrc, category } = props.value;
+
+    const id = props.value.id ? props.value.id : props.value._id;
+
     const { userId} = props;
 
     const classes = useStyles();
@@ -40,6 +49,18 @@ function WordItemCard(props) {
         console.error("The voices is unavailable", e)
     });
 
+    let isFavorite = isFavoriteFunc(id);
+
+    function isFavoriteFunc(cardId) {
+        if (!favoriteCards.favoriteCards)
+            return false;
+        for (let key in favoriteCards.favoriteCards) {
+            if (favoriteCards.favoriteCards[key]['cardId'] === cardId)
+                return true;
+        }
+        return false;
+    }
+
     function speak() {
         speech.speak({
             text: word,
@@ -55,19 +76,25 @@ function WordItemCard(props) {
             userId: userId,
             cardId: id
         };
-        console.log(card);
-
-        axios.post('/api/favorite-cards', card)
+        axios.put('/api/favorite-cards', card)
             .then(res => {
-                console.log(res);
+                store.dispatch({
+                    type: SET_FAVORITE_CARDS,
+                    payload: res.data
+                });
             })
     }
 
     return (
         <Card className={classes.card}>
+            <div style={{backgroundColor: '#4be4dc',
+                padding: '3px',
+                textAlign: 'center'}}
+            >
+                <p className="card-item-category">{category}</p>
+            </div>
             <CardActionArea
                 onClick={speak}
-
             >
                 <CardMedia
                     className={classes.media}
@@ -76,8 +103,8 @@ function WordItemCard(props) {
                 >
                     <StarBorder
                         className="favorite-icon"
-                        style={{ fontSize: '30px' }}
                         onClick={favoriteHandler}
+                            style={{ fontSize: '30px', color: isFavorite ? 'blue' : 'auto' }}
                     />
                 </CardMedia>
                 <CardContent>
@@ -97,19 +124,16 @@ function WordItemCard(props) {
                     </Typography>
                 </CardContent>
             </CardActionArea>
-            <CardActions>
-                <Button size="small" color="primary">
-                    Share
-                </Button>
-                <Button
-                    size="small"
-                    color="primary"
-                >
-                    Learn More
-                </Button>
-            </CardActions>
         </Card>
     );
 }
 
-export default WordItemCard;
+WordItemCard.propTypes = {
+    favoriteCards: PropTypes.object.isRequired
+};
+
+const mapStateToProps = (state) => ({
+    favoriteCards: state.favoriteCards
+});
+export default connect(mapStateToProps)(WordItemCard);
+

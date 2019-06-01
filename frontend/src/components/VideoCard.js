@@ -7,13 +7,13 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Speech from 'speak-tts'
 
 import ReactPlayer from 'react-player'
 
 const useStyles = makeStyles({
     card: {
         maxWidth: 630,
+        height: 500
     },
     media: {
         height: 400,

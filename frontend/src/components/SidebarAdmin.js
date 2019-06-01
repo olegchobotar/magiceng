@@ -28,7 +28,7 @@ import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {logoutUser} from "../actions/authentication";
 
-import { jsonServerRestClient, Admin, Resource, Delete, MenuItemLink } from 'admin-on-rest';
+import { jsonServerRestClient, Admin, Resource, Delete } from 'admin-on-rest';
 
 import { AdminWordsCreate, AdminWordsEdit, AdminWordsList } from '../posts/admidWordsList';
 import { AdminVideosCreate, AdminVideosEdit, AdminVideosList } from '../posts/adminVideosList';
@@ -41,8 +41,6 @@ import Fab from '@material-ui/core/Fab';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import '../App.css'
-import restClient from '../restClient'
-
 
 function MiniDrawer(props) {
     const { user, isAuthenticated } = props;
@@ -120,7 +118,7 @@ function MiniDrawer(props) {
                         component={Link}
                         to="/words"
                     >
-                        New Words
+                        Words
                     </Button>
                     <Button
                         className="navbar-item"
@@ -128,7 +126,7 @@ function MiniDrawer(props) {
                         component={Link}
                         to="/videos"
                     >
-                        Video
+                        Videos
                     </Button>
                     { isAuthenticated ?(
                         <Fragment>
@@ -147,6 +145,7 @@ function MiniDrawer(props) {
                             </Button>
                             <Menu id="simple-menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
                                 <MenuItem onClick={handleClose} component={Link} to='/profile'>Profile</MenuItem>
+                                <MenuItem onClick={handleClose} component={Link} to='/favorite'>Favorite Cards</MenuItem>
                                 <MenuItem onClick={handleDashboard} component={Link} to='/dashboard'>Dashboard</MenuItem>
                                 <MenuItem onClick={handleClose} component={Link} to='/settings'>Settings</MenuItem>
                                 <MenuItem onClick={onLogout.bind(MiniDrawer)} component={Link} to='/' >Logout</MenuItem>

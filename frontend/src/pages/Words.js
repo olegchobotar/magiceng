@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
 import WordItemCard from '../components/WordItemCard';
 
@@ -9,6 +8,10 @@ import '../words-page.css';
 import TextField from '@material-ui/core/TextField'
 import { connect } from 'react-redux';
 import PropTypes from "prop-types";
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
 
 class WordsComponent extends Component {
     constructor() {
@@ -20,7 +23,10 @@ class WordsComponent extends Component {
     state = {
         isLoading: true,
         wordPosts: [],
-        error: null
+        favoriteCards: [],
+        categories: [],
+        error: null,
+        category: ''
     };
 
     componentDidMount() {
@@ -29,6 +35,21 @@ class WordsComponent extends Component {
                 this.setState({
                     isLoading: false,
                     wordPosts: res.data
+                });
+            })
+            .catch(error => this.setState({ error, isLoading: false }));
+
+        axios.get('/api/favorite-cards/' + this.props.auth.user.id)
+            .then(res => {
+                this.setState({
+                    favoriteCards: res.data
+                });
+            });
+
+        axios.get('/api/word-categories/all')
+            .then(res => {
+                this.setState({
+                    categories: res.data
                 });
             })
             .catch(error => this.setState({ error, isLoading: false }));
@@ -45,8 +66,23 @@ class WordsComponent extends Component {
             .catch(error => this.setState({ error, isLoading: false }));
     }
 
+    handleChange(value) {
+        this.setState({
+            category: value
+        });
+
+        const api = value ? '/api/words/find-by-category/' + value : '/api/words';
+        axios.get(api)
+            .then(res => {
+                this.setState({
+                    wordPosts: res.data
+                });
+            })
+            .catch(error => this.setState({ error, isLoading: false }));
+    }
+
     render() {
-        const { isLoading, wordPosts, error } = this.state;
+        const { isLoading, wordPosts, error, categories, favoriteCards, category } = this.state;
         const {user} = this.props.auth;
 
         const main = (
@@ -59,27 +95,62 @@ class WordsComponent extends Component {
                 <div
                     className="search-block"
                 >
-                    <TextField
-                        type="text"
-                        label="Search"
-                        name="word-search"
-                        onChange={ this.handleSearchChange }
-                        variant="outlined"
-                    />
+                    <FormControl
+                        style={{minWidth: '150px', margin: '9px'}}
+                    >
+                        <InputLabel htmlFor="category-label">Category</InputLabel>
+                        <Select
+                            value={category}
+                            onChange={event => this.handleChange(event.target.value)}
+                            name="age"
+                            inputProps={{
+                                name: 'category',
+                                id: 'category-label',
+                            }}
+                        >
+                            <MenuItem value="">
+                                <em>All</em>
+                            </MenuItem>
+                            { categories.map(category => {
+                                return (
+                                    <MenuItem value={category.name}>{category.name}</MenuItem>
+                                );
+                            })}
+                        </Select>
+                    </FormControl>
+                    <FormControl>
+                        <TextField
+                            type="text"
+                            label="Search"
+                            name="word-search"
+                            tyle={{height: '30px'}}
+                            onChange={ this.handleSearchChange }
+                            variant="outlined"
+                        />
+                    </FormControl>
+
+
                 </div>
                 <div className="posts-container">
                     <h1>Words</h1>
                     <Grid
-                        justify="center"
                         container
-                        spacing={3}>
+                        spacing={3}
+                        alignItems="center"
+                        justify="center"
+                    >
                         {error ? <p>{error.message}</p> : null}
                         {!isLoading ? (
                             wordPosts.map(wordPost => {
                                 const { _id } = wordPost;
                                 return (
-                                    <Grid item xs={6} md={4} lg={3} key={_id}>
-                                       <WordItemCard value={wordPost} userId={user.id}/>
+                                    <Grid
+                                        item
+                                        xs={12}
+                                        md={4}
+                                        lg={3}
+                                        key={_id}>
+                                       <WordItemCard favoriteCards={favoriteCards} value={wordPost} userId={user.id}/>
                                     </Grid>
                                 );
                             })

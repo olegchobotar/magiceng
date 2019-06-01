@@ -18,3 +18,9 @@
     margin: 20px;
     font-size: 40px;
 }
+
+.videos-container {
+    padding-left: 2%;
+    max-width: 1500px;
+    margin: 0 auto;
+}

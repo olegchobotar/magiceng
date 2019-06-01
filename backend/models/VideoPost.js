@@ -29,8 +29,6 @@ VideoPostSchema.method('transform', function() {
     return obj;
 });
 
-VideoPostSchema.index({'title': 'text', 'description': 'text'});
-
 const VideoPost = mongoose.model('video_posts', VideoPostSchema);
 
 module.exports = VideoPost;
