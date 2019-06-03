@@ -49,6 +49,7 @@ class CardsFavoriteComponent extends Component {
 
     render() {
         const { isLoading, favoriteCards, error } = this.state;
+        console.log(this.state);
         const {user} = this.props.auth;
 
         const main = (

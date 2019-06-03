@@ -2,31 +2,33 @@ import React, { Fragment  } from 'react';
 import clsx from 'clsx';
 import { Link } from 'react-router-dom';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import Menu from '@material-ui/core/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import Videocam from '@material-ui/icons/Videocam';
-import VideoLabel from '@material-ui/icons/VideoLabel';
 import Class from '@material-ui/icons/Class';
 import { withRouter } from 'react-router-dom';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import Radio from '@material-ui/core/Radio';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {logoutUser} from "../actions/authentication";
+
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import { allCategories } from "../images-sources";
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Slide from '@material-ui/core/Slide';
 
 import { jsonServerRestClient, Admin, Resource, Delete } from 'admin-on-rest';
 
@@ -42,24 +44,30 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import '../App.css'
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
+
 function MiniDrawer(props) {
     const { user, isAuthenticated } = props;
     const classes = useStyles();
-    const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
-
-    function handleDrawerOpen() {
-        setOpen(true);
-    }
-
-    function handleDrawerClose() {
-        setOpen(false);
-    }
+    const [settingsOpen, seSettingsOpen] = React.useState(false);
+    const [backgroundImages, setBackgroundImages] = React.useState('');
 
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     function handleClick(event) {
         setAnchorEl(event.currentTarget);
+    }
+
+    function handleChangeBackground(event, newValue) {
+        setBackgroundImages(newValue);
+        localStorage.setItem('background', newValue)
+    }
+
+    function handleSettings(event) {
+        setAnchorEl(null);
+        seSettingsOpen(!settingsOpen);
     }
 
     function handleDashboard(event) {
@@ -87,23 +95,10 @@ function MiniDrawer(props) {
             <AppBar
                 position="fixed"
                 className={clsx(classes.appBar, {
-                    [classes.appBarShift]: open,
+                    [classes.appBarShift]: false,
                 })}
             >
                 <Toolbar>
-                    {isAuthenticated && user.role === 'Admin' && false &&(
-                        <IconButton
-                            color="inherit"
-                            aria-label="Open drawer"
-                            onClick={handleDrawerOpen}
-                            edge="start"
-                            className={clsx(classes.menuButton, {
-                                [classes.hide]: open,
-                            })}
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                    )}
                     <Typography
                         variant="h6"
                         className={classes.title}
@@ -147,7 +142,7 @@ function MiniDrawer(props) {
                                 <MenuItem onClick={handleClose} component={Link} to='/profile'>Profile</MenuItem>
                                 <MenuItem onClick={handleClose} component={Link} to='/favorite'>Favorite Cards</MenuItem>
                                 <MenuItem onClick={handleDashboard} component={Link} to='/dashboard'>Dashboard</MenuItem>
-                                <MenuItem onClick={handleClose} component={Link} to='/settings'>Settings</MenuItem>
+                                <MenuItem onClick={handleSettings}>Settings</MenuItem>
                                 <MenuItem onClick={onLogout.bind(MiniDrawer)} component={Link} to='/' >Logout</MenuItem>
                             </Menu>
                         </Fragment>
@@ -162,71 +157,47 @@ function MiniDrawer(props) {
                                     to='/register'
                             >Sign Up</Button>
                         </Fragment>
-
                     )}
-
                 </Toolbar>
 
             </AppBar>
-            {isAuthenticated && user.role === 'Admiddn' && (
-                <Fragment>
-                    <Drawer
-                        variant="permanent"
-                        className={clsx(classes.drawer, {
-                            [classes.drawerOpen]: open,
-                            [classes.drawerClose]: !open,
-                        })}
-                        classes={{
-                            paper: clsx({
-                                [classes.drawerOpen]: open,
-                                [classes.drawerClose]: !open,
-                            }),
-                        }}
-                        open={open}
-                    >
-                        <div className={classes.toolbar}>
-                            <IconButton onClick={handleDrawerClose}>
-                                {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-                            </IconButton>
-                        </div>
-                        <Divider />
-                        <List>
-                            <ListItem
-                                button
-                                component={Link}
-                                to={'/dashboard/cards'}
-                            >
-                                <ListItemIcon> <Class /> </ListItemIcon>
-                                <ListItemText primary="Cards Constructor" />
-                            </ListItem>
-                            <ListItem
-                                button
-                                component={Link}
-                                to={'/dashboard/words'}
-                            >
-                                <ListItemIcon> <Videocam /> </ListItemIcon>
-                                <ListItemText primary="Words Constructor" />
-                            </ListItem>
-                            <ListItem
-                                button
-                                component={Link}
-                                to={'/dashboard/video'}
-                            >
-                                <ListItemIcon> <VideoLabel /> </ListItemIcon>
-                                <ListItemText primary="Video Components" />
-                            </ListItem>
-
-                        </List>
-                    </Drawer>
-                </Fragment>
-            )}
-
             <main className={classes.content}>
                 <div className={classes.toolbar} />
 
             </main>
         </Fragment>
     );
+
+    const settings = (
+        <Dialog
+            maxWidth="md"
+            open={settingsOpen}
+            TransitionComponent={Transition}
+            keepMounted
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-slide-title"
+            aria-describedby="alert-dialog-slide-description"
+        >
+            <DialogTitle id="alert-dialog-slide-title">{"Settings"}</DialogTitle>
+            <DialogContent>
+                <RadioGroup
+                    aria-label="Ringtone"
+                    name="ringtone"
+                    value={backgroundImages}
+                    onChange={handleChangeBackground}
+                >
+                    {allCategories.map(option => (
+                        <FormControlLabel value={option} key={option} control={<Radio />} label={option} />
+                    ))}
+                </RadioGroup>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={handleSettings} color="primary">
+                    Save
+                </Button>
+            </DialogActions>
+        </Dialog>
+    )
 
     const admin = (
         <Fragment>
@@ -294,6 +265,7 @@ function MiniDrawer(props) {
     );
     return (
         <div>
+            {settings}
             {isAuthenticated && user.role === 'Admin' && localStorage.isDashboardActive ? admin : userBar}
         </div>
     );

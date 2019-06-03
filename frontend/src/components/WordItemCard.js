@@ -25,7 +25,7 @@ const useStyles = makeStyles({
 });
 
 function WordItemCard(props) {
-    const [favoriteCards, setFavoriteCards] = useState([]);
+    const { favoriteCards } = props;
 
     const { word, translation, imageSrc, category } = props.value;
 
@@ -76,7 +76,10 @@ function WordItemCard(props) {
         };
         axios.put('/api/favorite-cards', card)
             .then(res => {
-                setFavoriteCards(res.data);
+                store.dispatch({
+                    type: SET_FAVORITE_CARDS,
+                    payload: res.data
+                });
             })
     }
 

@@ -54,7 +54,6 @@ function CardGame (props) {
 
     useEffect(() => {
         if (!initializedCategories) {
-
             axios.get('/api/word-categories/all')
                 .then(({ data }) => {
                     setCategories(data);
@@ -65,6 +64,8 @@ function CardGame (props) {
     });
 
     function answerHandler(e) {
+        if (answer)
+            return;
         const value = e.target.textContent;
         if (value === cards[index].word) {
             console.log('right')
@@ -74,7 +75,7 @@ function CardGame (props) {
         setTimeout(
             function() {
                 setButtons(randomFourValues(cards, index + 1));
-                if (!cards[index + 1])
+                if (!cards[index + 1] || index === 9)
                     setOpen(true);
                 setIndex(index + 1);
                 setAnswer('');
@@ -119,7 +120,7 @@ function CardGame (props) {
         const api = e.target.value !== 'All' ? '/api/words/find-by-category/' + e.target.value : '/api/words';
         axios.get(api)
             .then(({ data }) => {
-                setCards(data);
+                setCards(shuffle(data));
                 setButtons(randomFourValues(data, index));
             });
         setInitialized(true);
@@ -209,8 +210,6 @@ function CardGame (props) {
                                     </Button>
                                 </DialogActions>
                             </Dialog>
-
-
 
                         </div>
                     </Col>

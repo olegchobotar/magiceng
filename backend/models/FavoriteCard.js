@@ -17,7 +17,6 @@ const FavoriteCardSchema = new Schema({
     },
 });
 
-
 const FavoriteCard = mongoose.model('favorite_cards', FavoriteCardSchema);
 
 module.exports = FavoriteCard;

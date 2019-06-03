@@ -111,9 +111,14 @@ class WordsComponent extends Component {
                             <MenuItem value="">
                                 <em>All</em>
                             </MenuItem>
-                            { categories.map(category => {
+                            { categories.map((category, key) => {
                                 return (
-                                    <MenuItem value={category.name}>{category.name}</MenuItem>
+                                    <MenuItem
+                                        key={key}
+                                        value={category.name}
+                                    >
+                                        {category.name}
+                                    </MenuItem>
                                 );
                             })}
                         </Select>
@@ -142,16 +147,16 @@ class WordsComponent extends Component {
                         {error ? <p>{error.message}</p> : null}
                         {!isLoading ? (
                             wordPosts.map(wordPost => {
-                                const { _id } = wordPost;
+                                const id = wordPost.id ? wordPost.id : wordPost._id;
                                 return (
                                     <Grid
                                         item
                                         xs={12}
                                         md={4}
                                         lg={3}
+                                        key={ id }
                                     >
                                        <WordItemCard
-                                           key={_id + 'card'}
                                            favoriteCards = {favoriteCards}
                                            value={wordPost}
                                            userId={user.id}/>
