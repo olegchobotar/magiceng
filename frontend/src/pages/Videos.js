@@ -76,11 +76,9 @@ export default class VideosComponent extends Component {
 
         const main = (
             <div>
-                <img
-                    className="header-image"
-                    src={process.env.PUBLIC_URL + '/assets/images/beach.jpg'}
-                    alt='beautiful image'
-                />
+                <div className="videos-header-block">
+                </div>
+                <h1 style={{float: 'left', marginLeft: '30px'}}>Videos</h1>
                 <div
                     className="search-block"
                 >
@@ -116,7 +114,6 @@ export default class VideosComponent extends Component {
                     />
                 </div>
                 <div className="videos-container">
-                    <h1>Videos</h1>
                     <Grid
                         alignItems="center"
                         justify="center"

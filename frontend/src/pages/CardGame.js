@@ -80,8 +80,7 @@ function CardGame (props) {
                 setIndex(index + 1);
                 setAnswer('');
 
-            }
-                .bind(this),
+            },
             1500
         );
     }
@@ -174,8 +173,8 @@ function CardGame (props) {
                                             return (
                                                 <Button
                                                     key={key}
-                                                        style={ answer !== '' && cardValue === cards[index].word ? {backgroundColor: 'green'} :
-                                                                answer !== '' && answer === cardValue ? {backgroundColor: 'red'} : {}
+                                                        style={ answer !== '' && cardValue === cards[index].word ? {backgroundColor: '#7fe27f'} :
+                                                                answer !== '' && answer === cardValue ? {backgroundColor: '#FF6347'} : {}
                                                            }
                                                     onClick={answerHandler}
                                                 >{ cardValue }</Button>
@@ -203,6 +202,7 @@ function CardGame (props) {
                                     <DialogContentText id="alert-dialog-slide-description">
                                         You result is {countRightAnswers} of {index}. Good job!
                                     </DialogContentText>
+                                    <img src="../assets/images/result-gif.webp" alt=""/>
                                 </DialogContent>
                                 <DialogActions>
                                     <Button onClick={handleClose} color="primary">

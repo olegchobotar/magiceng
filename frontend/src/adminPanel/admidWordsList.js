@@ -6,18 +6,6 @@ import {
     DisabledInput, LongTextInput, SimpleForm, TextInput, TextField
 } from 'admin-on-rest';
 
-export const AdminWordsList = (props) => (
-    <List {...props}>
-        <Datagrid>
-            <TextField label="ID" source="id" />
-            <TextField label="Category" source="category" />
-            <TextField source="word" />
-            <TextField source="translation" />
-            <EditButton />
-        </Datagrid>
-    </List>
-);
-
 export const AdminWordsEdit = (props) => {
     const [initialized, setInitialized] = useState(false);
     const [categories, setCategories] = useState();
@@ -62,7 +50,7 @@ export const AdminWordsCreate = (props) => {
     });
 
     return (
-        <Edit {...props}>
+        <Create {...props}>
             <SimpleForm>
                 <SelectInput
                     className="video-select"
@@ -71,6 +59,19 @@ export const AdminWordsCreate = (props) => {
                 <TextInput source="translation" />
                 <LongTextInput source="imageSrc" />
             </SimpleForm>
-        </Edit>
+        </Create>
     )
 };
+
+export const AdminWordsList = (props) => (
+    <List {...props}>
+        <Datagrid>
+            <TextField label="ID" source="id" />
+            <TextField label="Category" source="category" />
+            <TextField source="word" />
+            <TextField source="translation" />
+            <EditButton />
+        </Datagrid>
+    </List>
+);
+

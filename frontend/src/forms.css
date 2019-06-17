@@ -2,6 +2,10 @@ body {
     background-image: linear-gradient(to right, rgba(243, 243, 243, 0.79), rgba(243, 243, 243, 0.8))
 }
 
+.invalid-feedback {
+    padding-top: 10px;
+}
+
 .container {
     height: 80vh;
     display: flex;

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { loginUser } from '../actions/authentication';
@@ -99,7 +100,7 @@ class Login extends Component {
                     </div>
                     <div className="form-group" style={{textAlign: 'center'}}>
                         <span> Need an account? </span>
-                        <a href="/register">Sign Up</a>
+                        <span><Link to="/register">Sign Up</Link></span>
                     </div>
                 </form>
             </div>
@@ -111,11 +112,11 @@ Login.propTypes = {
     loginUser: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
     errors: PropTypes.object.isRequired
-}
+};
 
 const mapStateToProps = (state) => ({
     auth: state.auth,
     errors: state.errors
-})
+});
 
 export  default connect(mapStateToProps, { loginUser })(Login)

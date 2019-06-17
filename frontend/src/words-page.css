@@ -1,8 +1,24 @@
-.header-image {
+.words-header-block, .videos-header-block{
     width: 100%;
+    background-position: center;
+    background-size: cover;
     height: 35vh;
-    object-fit: fill;
+    color: white;
 }
+.words-header-block {
+    background-image: url("assets/images/roof.jpg");
+}
+
+.videos-header-block {
+    background-image: url("assets/images/water.jpg");
+}
+
+.header-block h2 {
+    padding-top: 10%;
+    font-size: 42px;
+    color: #eeeeee;
+}
+
 .posts-container {
     max-width: 1700px;
     margin: 0 auto;
@@ -10,7 +26,7 @@
 
 .search-block {
     text-align: center;
-    margin-top: 20px;
+    margin: 20px 0;
 }
 
 .favorite-icon {

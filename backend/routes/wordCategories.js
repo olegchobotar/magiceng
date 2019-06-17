@@ -63,7 +63,8 @@ router.put('/:id', (req, res) => (
 
 router.delete('/:id', (req, res, next) => {
     return WordCategories.findByIdAndRemove(req.params.id)
-        .then(() => res.sendStatus(200))
+        .then(() => {res.writeHead(200, {"Data-key": "10"});
+            res.end(JSON.stringify(WordCategories));})
         .catch(next);
 });
 

@@ -15,7 +15,7 @@ const apiUrl = '/api';
  * Maps react-admin queries to my REST API
  *
  * @param {string} type Request type, e.g GET_LIST
- * @param {string} resource Resource name, e.g. "posts"
+ * @param {string} resource Resource name, e.g. "adminPanel"
  * @param {Object} payload Request parameters. Depends on the request type
  * @returns {Promise} the Promise for a data response
  */

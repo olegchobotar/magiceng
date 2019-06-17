@@ -54,13 +54,12 @@ class CardsFavoriteComponent extends Component {
 
         const main = (
             <div>
-                <img
-                    className="header-image"
-                    src={process.env.PUBLIC_URL + '/assets/images/beach.jpg'}
-                    alt='beautiful image'
-                />
+                <div className="words-header-block">
+                </div>
+                <h1 style={{float: 'left', marginLeft: '30px'}}>Favorite Cards</h1>
                 <div
                     className="search-block"
+                    style={{marginRight: '15%'}}
                 >
                     <TextField
                         type="text"
@@ -70,8 +69,7 @@ class CardsFavoriteComponent extends Component {
                         variant="outlined"
                     />
                 </div>
-                <div className="posts-container">
-                    <h1>Words</h1>
+                <div className="posts-container" >
                     <Grid
                         justify="center"
                         container
@@ -89,6 +87,9 @@ class CardsFavoriteComponent extends Component {
                             })
                         ) : (
                             <h3>Loading...</h3>
+                        )}
+                        {!isLoading && !favoriteCards.length &&(
+                            <div style={{marginTop: '40px', fontSize: '26px'}}>There is no Favorite Cards</div>
                         )}
                     </Grid>
                 </div>

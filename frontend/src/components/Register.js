@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { registerUser } from '../actions/authentication';
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button';
 import classnames from 'classnames';
-
-// import '../forms.css'
 
 class Register extends Component {
 
@@ -37,7 +36,7 @@ class Register extends Component {
             email: this.state.email,
             password: this.state.password,
             password_confirm: this.state.password_confirm
-        }
+        };
         this.props.registerUser(user, this.props.history);
     }
 
@@ -132,7 +131,7 @@ class Register extends Component {
                     </div>
                     <div className="form-group" style={{textAlign: 'center'}}>
                         <span> Already have an account? </span>
-                        <a href="/login">Log In</a>
+                        <span><Link to="/login">Log In</Link></span>
                     </div>
                 </form>
             </div>

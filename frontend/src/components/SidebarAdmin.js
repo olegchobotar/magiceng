@@ -1,21 +1,20 @@
 import React, { Fragment  } from 'react';
 import clsx from 'clsx';
 import { Link } from 'react-router-dom';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Menu from '@material-ui/core/Menu';
 import Videocam from '@material-ui/icons/Videocam';
+import Category from '@material-ui/icons/Category';
 import Class from '@material-ui/icons/Class';
+import People from '@material-ui/icons/People';
 import { withRouter } from 'react-router-dom';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -32,11 +31,11 @@ import Slide from '@material-ui/core/Slide';
 
 import { jsonServerRestClient, Admin, Resource, Delete } from 'admin-on-rest';
 
-import { AdminWordsCreate, AdminWordsEdit, AdminWordsList } from '../posts/admidWordsList';
-import { AdminVideosCreate, AdminVideosEdit, AdminVideosList } from '../posts/adminVideosList';
-import { AdminUsersCreate, AdminUsersEdit, AdminUsersList } from '../posts/adminUsersList';
-import { AdminVideoCategoriesCreate, AdminVideoCategoriesEdit, AdminVideoCategoriesList } from '../posts/adminVideoCategoryList';
-import { AdminWordCategoriesCreate, AdminWordCategoriesEdit, AdminWordCategoriesList } from '../posts/adminWordCategoryList';
+import { AdminWordsCreate, AdminWordsEdit, AdminWordsList } from '../adminPanel/admidWordsList';
+import { AdminVideosCreate, AdminVideosEdit, AdminVideosList } from '../adminPanel/adminVideosList';
+import { AdminUsersCreate, AdminUsersEdit, AdminUsersList } from '../adminPanel/adminUsersList';
+import { AdminVideoCategoriesCreate, AdminVideoCategoriesEdit, AdminVideoCategoriesList } from '../adminPanel/adminVideoCategoryList';
+import { AdminWordCategoriesCreate, AdminWordCategoriesEdit, AdminWordCategoriesList } from '../adminPanel/adminWordCategoryList';
 
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import Fab from '@material-ui/core/Fab';
@@ -113,7 +112,7 @@ function MiniDrawer(props) {
                         component={Link}
                         to="/words"
                     >
-                        Words
+                        Cards
                     </Button>
                     <Button
                         className="navbar-item"
@@ -206,8 +205,8 @@ function MiniDrawer(props) {
                 restClient={jsonServerRestClient('/api')}>
                 <Resource
                     name="word-categories"
-                    options={{ label: 'Word Categories' }}
-                    icon={Class}
+                    options={{ label: 'Card Categories' }}
+                    icon={Category}
                     list={AdminWordCategoriesList}
                     edit={AdminWordCategoriesEdit}
                     create={AdminWordCategoriesCreate}
@@ -215,6 +214,7 @@ function MiniDrawer(props) {
                 />
                 <Resource
                     name="words"
+                    options={{ label: 'Cards' }}
                     icon={Class}
                     list={AdminWordsList}
                     edit={AdminWordsEdit}
@@ -224,7 +224,7 @@ function MiniDrawer(props) {
                 <Resource
                     name="video-categories"
                     options={{ label: 'Video Categories' }}
-                    icon={Class}
+                    icon={Category}
                     list={AdminVideoCategoriesList}
                     edit={AdminVideoCategoriesEdit}
                     create={AdminVideoCategoriesCreate}
@@ -240,7 +240,7 @@ function MiniDrawer(props) {
                 />
                 <Resource
                     name="users"
-                    icon={Videocam}
+                    icon={People}
                     list={AdminUsersList}
                     edit={AdminUsersEdit}
                     create={AdminUsersCreate}

@@ -87,17 +87,17 @@ class WordsComponent extends Component {
 
         const main = (
             <div>
-                <img
-                    className="header-image"
-                    src={process.env.PUBLIC_URL + '/assets/images/beach.jpg'}
-                    alt='beautiful image'
-                />
+                <div className="words-header-block">
+                </div>
+                <h1 style={{float: 'left', marginLeft: '30px'}}>Cards</h1>
+
                 <div
                     className="search-block"
                 >
                     <FormControl
                         style={{minWidth: '150px', margin: '9px'}}
                     >
+
                         <InputLabel htmlFor="category-label">Category</InputLabel>
                         <Select
                             value={category}
@@ -137,7 +137,6 @@ class WordsComponent extends Component {
 
                 </div>
                 <div className="posts-container">
-                    <h1>Words</h1>
                     <Grid
                         container
                         spacing={3}
