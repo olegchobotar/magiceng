@@ -1,4 +1,4 @@
-import React, { Fragment  } from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import clsx from 'clsx';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
@@ -12,6 +12,10 @@ import Category from '@material-ui/icons/Category';
 import Class from '@material-ui/icons/Class';
 import People from '@material-ui/icons/People';
 import { withRouter } from 'react-router-dom';
+import ListItemText from '@material-ui/core/ListItemText';
+import TextField from '@material-ui/core/TextField';
+import ListItem from '@material-ui/core/ListItem';
+import List from '@material-ui/core/List';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -28,6 +32,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import { allCategories } from "../images-sources";
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
+import { setTheme } from '../actions/theme'
 
 import { jsonServerRestClient, Admin, Resource, Delete } from 'admin-on-rest';
 
@@ -42,6 +47,8 @@ import Fab from '@material-ui/core/Fab';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import '../App.css'
+import store from "../store";
+import {SET_THEME} from "../actions/types";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -51,17 +58,22 @@ function MiniDrawer(props) {
     const { user, isAuthenticated } = props;
     const classes = useStyles();
     const [settingsOpen, seSettingsOpen] = React.useState(false);
-    const [backgroundImages, setBackgroundImages] = React.useState('');
-
+    const [settingsThemeOpen, setSettingsThemeOpen] = React.useState(false);
+    const [settingsChangePasswordOpen, setSettingsChangePasswordOpen] = React.useState(false);
+    const [backgroundImages, setBackgroundImages] = React.useState("Animals");
+    const [initialized, setInitialized] = useState(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
 
+    useEffect(() => {
+        if (!initialized) {
+            if (localStorage.getItem('background')) {
+                setBackgroundImages(localStorage.getItem('background'));
+            }
+            setInitialized(true);
+        }
+    });
     function handleClick(event) {
         setAnchorEl(event.currentTarget);
-    }
-
-    function handleChangeBackground(event, newValue) {
-        setBackgroundImages(newValue);
-        localStorage.setItem('background', newValue)
     }
 
     function handleSettings(event) {
@@ -138,7 +150,6 @@ function MiniDrawer(props) {
                                      }} />
                             </Button>
                             <Menu id="simple-menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-                                <MenuItem onClick={handleClose} component={Link} to='/profile'>Profile</MenuItem>
                                 <MenuItem onClick={handleClose} component={Link} to='/favorite'>Favorite Cards</MenuItem>
                                 <MenuItem onClick={handleDashboard} component={Link} to='/dashboard'>Dashboard</MenuItem>
                                 <MenuItem onClick={handleSettings}>Settings</MenuItem>
@@ -166,10 +177,110 @@ function MiniDrawer(props) {
             </main>
         </Fragment>
     );
+    const { value: valueProp, open } = props;
+    const radioGroupRef = React.useRef(null);
 
+    React.useEffect(() => {
+        if (!open) {
+            setBackgroundImages(valueProp);
+        }
+    }, [valueProp, open]);
+
+    function handleEntering() {
+        if (radioGroupRef.current != null) {
+            radioGroupRef.current.focus();
+        }
+    }
+
+    function handleOk() {
+        setSettingsThemeOpen(false);
+    }
+
+    function handleChange(event, newValue) {
+        setBackgroundImages(newValue);
+        store.dispatch({
+            type: SET_THEME,
+            payload: newValue
+        });
+        localStorage.setItem('background', newValue)
+    }
+
+    const themeSettingsModal = (
+        <Dialog
+            disableBackdropClick
+            disableEscapeKeyDown
+            maxWidth="xs"
+            onEntering={handleEntering}
+            aria-labelledby="confirmation-dialog-title"
+            open={settingsThemeOpen}
+        >
+            <DialogTitle id="settings-theme">Theme</DialogTitle>
+            <DialogContent dividers>
+                <RadioGroup
+                    ref={radioGroupRef}
+                    aria-label="Ringtone"
+                    name="ringtone"
+                    value={backgroundImages}
+                    onChange={handleChange}
+                >
+                    {allCategories.map(option => (
+                        <FormControlLabel value={option} key={option} control={<Radio />} label={option} />
+                    ))}
+                </RadioGroup>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={handleOk} color="primary">
+                    Ok
+                </Button>
+            </DialogActions>
+        </Dialog>
+    );
+
+    const changePasswordSettingsModal = (
+        <Dialog
+            disableBackdropClick
+            disableEscapeKeyDown
+            maxWidth="xs"
+            onEntering={handleEntering}
+            aria-labelledby="confirmation-dialog-title"
+            open={settingsChangePasswordOpen}
+        >
+            <DialogTitle id="settings-theme">Change Password</DialogTitle>
+            <DialogContent dividers>
+                <TextField
+                    autoFocus
+                    margin="dense"
+                    id="password"
+                    label="Enter old password"
+                    type="password"
+                    fullWidth
+                />
+                <TextField
+                    margin="dense"
+                    id="password"
+                    label="Enter new password"
+                    type="password"
+                    fullWidth
+                />
+                <TextField
+                    margin="dense"
+                    id="password"
+                    label="Repeat password"
+                    type="password"
+                    fullWidth
+                />
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={handleOk} color="primary">
+                    Ok
+                </Button>
+            </DialogActions>
+        </Dialog>
+    );
     const settings = (
         <Dialog
-            maxWidth="md"
+            fullWidth={true}
+            maxWidth = {'sm'}
             open={settingsOpen}
             TransitionComponent={Transition}
             keepMounted
@@ -179,24 +290,42 @@ function MiniDrawer(props) {
         >
             <DialogTitle id="alert-dialog-slide-title">{"Settings"}</DialogTitle>
             <DialogContent>
-                <RadioGroup
-                    aria-label="Ringtone"
-                    name="ringtone"
-                    value={backgroundImages}
-                    onChange={handleChangeBackground}
-                >
-                    {allCategories.map(option => (
-                        <FormControlLabel value={option} key={option} control={<Radio />} label={option} />
-                    ))}
-                </RadioGroup>
+                <List component="div" role="list">
+                    <ListItem
+                        button
+                        divider
+                        aria-haspopup="true"
+                        aria-controls="ringtone-menu"
+                        aria-label="Theme"
+                        onClick={() => setSettingsThemeOpen(true)}
+                        role="listitem"
+                    >
+                        <ListItemText primary="Theme" secondary={backgroundImages} />
+                    </ListItem>
+                </List>
+                <List component="div" role="list">
+                    <ListItem
+                        button
+                        divider
+                        aria-haspopup="true"
+                        aria-controls="ringtone-menu"
+                        aria-label="Change password"
+                        onClick={(  ) => setSettingsChangePasswordOpen(true)}
+                        role="listitem"
+                    >
+                        <ListItemText primary="Change Password"/>
+                    </ListItem>
+                </List>
+                {themeSettingsModal}
+                {changePasswordSettingsModal}
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleSettings} color="primary">
-                    Save
+                    Close
                 </Button>
             </DialogActions>
         </Dialog>
-    )
+    );
 
     const admin = (
         <Fragment>
@@ -277,7 +406,8 @@ const drawerWidth = 240;
 
 MiniDrawer.propTypes = {
     logoutUser: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired
+    auth: PropTypes.object.isRequired,
+    theme: PropTypes.string,
 };
 
 const useStyles = makeStyles(theme => ({
@@ -349,11 +479,13 @@ const useStyles = makeStyles(theme => ({
 
 MiniDrawer.propTypes = {
     logoutUser: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired
+    setTheme: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired,
+    theme: PropTypes.string,
 };
 
 const mapStateToProps = (state) => ({
-    auth: state.auth
+    auth: state.auth,
 });
 
-export default connect(mapStateToProps, { logoutUser })(withRouter(MiniDrawer));
+export default connect(mapStateToProps, { logoutUser, setTheme })(withRouter(MiniDrawer));

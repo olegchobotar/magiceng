@@ -2,3 +2,4 @@ export const GET_ERRORS = 'GET_ERRORS';
 export const SET_CURRENT_USER = 'SET_CURRENT_USER';
 export const SET_FAVORITE_CARDS = 'SET_FAVORITE_CARDS';
 export const SET_CATEGORIES = 'SET_CATEGORIES';
+export const SET_THEME = 'SET_THEME';

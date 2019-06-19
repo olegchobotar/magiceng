@@ -5,12 +5,15 @@ import { Link } from 'react-router-dom';
 import Sky from 'react-sky';
 import '../home.css'
 import { animals , space, food, tech, autumn, social } from '../images-sources';
+import {connect} from "react-redux";
+import PropTypes from "prop-types";
 
-export default class Home extends Component {
+class Home extends Component {
 
     render() {
+        const { theme } = this.props;
         let background = '';
-        switch (localStorage.getItem('background')) {
+        switch (theme.theme) {
             case 'Autumn':
                 background = autumn;
                 break;
@@ -22,9 +25,6 @@ export default class Home extends Component {
                 break;
             case 'Tech':
                 background = tech;
-                break;
-            case 'Autumn':
-                background = food;
                 break;
             case 'Social':
                 background = social;
@@ -85,3 +85,14 @@ export default class Home extends Component {
         );
     }
 }
+
+Home.propTypes = {
+    theme: PropTypes.string,
+};
+
+
+const mapStateToProps = (state) => ({
+    theme: state.theme
+});
+
+export default connect(mapStateToProps)(Home);
