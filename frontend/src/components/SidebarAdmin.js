@@ -60,7 +60,9 @@ function MiniDrawer(props) {
     const [settingsOpen, seSettingsOpen] = React.useState(false);
     const [settingsThemeOpen, setSettingsThemeOpen] = React.useState(false);
     const [settingsChangePasswordOpen, setSettingsChangePasswordOpen] = React.useState(false);
-    const [backgroundImages, setBackgroundImages] = React.useState("Animals");
+    const [backgroundImages, setBackgroundImages] = React.useState('');
+    const [oldPassword, setOldPassword] = React.useState('');
+    const [newPassword, setNewPassword] = React.useState('');
     const [initialized, setInitialized] = useState(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -193,6 +195,8 @@ function MiniDrawer(props) {
     }
 
     function handleOk() {
+        console.log(oldPassword);
+        console.log(newPassword);
         setSettingsThemeOpen(false);
     }
 
@@ -203,6 +207,14 @@ function MiniDrawer(props) {
             payload: newValue
         });
         localStorage.setItem('background', newValue)
+    }
+
+    function handleOldPassword(e) {
+        setOldPassword(e.target.value);
+    }
+
+    function handleNewPassword(e) {
+        setNewPassword(e.target.value);
     }
 
     const themeSettingsModal = (
@@ -220,7 +232,7 @@ function MiniDrawer(props) {
                     ref={radioGroupRef}
                     aria-label="Ringtone"
                     name="ringtone"
-                    value={backgroundImages}
+                    value={backgroundImages || localStorage.getItem('background')}
                     onChange={handleChange}
                 >
                     {allCategories.map(option => (
@@ -248,6 +260,7 @@ function MiniDrawer(props) {
             <DialogTitle id="settings-theme">Change Password</DialogTitle>
             <DialogContent dividers>
                 <TextField
+                    onChange={handleOldPassword}
                     autoFocus
                     margin="dense"
                     id="password"
@@ -256,16 +269,10 @@ function MiniDrawer(props) {
                     fullWidth
                 />
                 <TextField
+                    onChange={handleNewPassword}
                     margin="dense"
                     id="password"
                     label="Enter new password"
-                    type="password"
-                    fullWidth
-                />
-                <TextField
-                    margin="dense"
-                    id="password"
-                    label="Repeat password"
                     type="password"
                     fullWidth
                 />
@@ -300,7 +307,7 @@ function MiniDrawer(props) {
                         onClick={() => setSettingsThemeOpen(true)}
                         role="listitem"
                     >
-                        <ListItemText primary="Theme" secondary={backgroundImages} />
+                        <ListItemText primary="Theme" secondary={backgroundImages || localStorage.getItem('background')} />
                     </ListItem>
                 </List>
                 <List component="div" role="list">
