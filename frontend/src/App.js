@@ -19,6 +19,8 @@ import Videos from './pages/Videos';
 import Words from './pages/Words';
 import CardFavorite from './pages/CardFavorite';
 import CardGame from './pages/CardGame';
+import { positions, Provider as AlertProvider } from "react-alert";
+import AlertTemplate from "react-alert-template-basic";
 
 if(localStorage.jwtToken) {
     setAuthToken(localStorage.jwtToken);
@@ -34,8 +36,13 @@ if(localStorage.jwtToken) {
 
 class App extends Component {
     render() {
+        const options = {
+            timeout: 5000,
+            position: positions.BOTTOM_CENTER
+        };
 
         return (
+            <AlertProvider template={AlertTemplate} {...options}>
             <Fragment>
                 <Provider store = { store }>
                     <Router>
@@ -55,7 +62,7 @@ class App extends Component {
                     </Router>
                 </Provider>
             </Fragment>
-
+            </AlertProvider>
         );
     }
 }

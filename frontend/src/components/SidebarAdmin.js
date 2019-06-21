@@ -24,7 +24,8 @@ import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import {logoutUser} from "../actions/authentication";
+import {logoutUser, setCurrentUser} from "../actions/authentication";
+import { useAlert } from 'react-alert'
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -49,6 +50,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import '../App.css'
 import store from "../store";
 import {SET_THEME} from "../actions/types";
+import axios from "axios";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -194,9 +196,18 @@ function MiniDrawer(props) {
         }
     }
 
+    function handleChangePassword() {
+        setSettingsChangePasswordOpen(false);
+        axios.post(`/api/users/${props.auth.user.id}/change-password`, {oldPassword, newPassword})
+            .then(res => {
+                alert.show('Password has been changed');
+            })
+            .catch(error => {
+                alert.show('Enter right password');
+            });
+    }
+
     function handleOk() {
-        console.log(oldPassword);
-        console.log(newPassword);
         setSettingsThemeOpen(false);
     }
 
@@ -247,7 +258,7 @@ function MiniDrawer(props) {
             </DialogActions>
         </Dialog>
     );
-
+    const alert = useAlert();
     const changePasswordSettingsModal = (
         <Dialog
             disableBackdropClick
@@ -278,7 +289,7 @@ function MiniDrawer(props) {
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleOk} color="primary">
+                <Button onClick={handleChangePassword} color="primary">
                     Ok
                 </Button>
             </DialogActions>

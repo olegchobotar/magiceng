@@ -18,6 +18,8 @@
     "ra-data-simple-rest": "^2.9.1",
     "react": "^16.8.6",
     "react-admin": "^2.9.1",
+    "react-alert": "^5.5.0",
+    "react-alert-template-basic": "^1.0.0",
     "react-bootstrap": "^1.0.0-beta.8",
     "react-dom": "^16.8.6",
     "react-player": "^1.11.0",

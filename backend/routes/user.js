@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const validateRegisterInput = require('../validation/register');
 const validateLoginInput = require('../validation/login');
+const validateChangePasswordInput = require('../validation/changePassword');
 
 const admins = require('../_helpers/admins');
 
@@ -138,6 +139,51 @@ router.post('/login', (req, res) => {
                     }
                     else {
                         errors.password = 'Incorrect Password';
+                        return res.status(400).json(errors);
+                    }
+                });
+        });
+});
+
+router.post('/:id/change-password', (req, res) => {
+    const { errors, isValid } = validateChangePasswordInput(req.body);
+
+    if(!isValid) {
+        return res.status(400).json(errors);
+    }
+
+    const oldPassword = req.body.oldPassword;
+    const newPassword = req.body.newPassword;
+    const userId = req.params.id;
+    console.log(oldPassword);
+    console.log(userId);
+    User.findById(userId)
+        .then(user => {
+            if(!user) {
+                console.log('not');
+                return res.status(404).json(errors);
+            }
+            bcrypt.compare(oldPassword, user.password)
+                .then(isMatch => {
+                    if (isMatch) {
+                        bcrypt.genSalt(10, (err, salt) => {
+                            if(err) console.error('There was an error', err);
+                            else {
+                                bcrypt.hash(newPassword, salt, (err, hash) => {
+                                    if(err) console.error('There was an error', err);
+                                    else {
+                                        user.password = hash;
+                                        user
+                                            .save()
+                                            .then(user => {
+                                                res.json(user)
+                                            });
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        errors.password = 'Wrong Password';
                         return res.status(400).json(errors);
                     }
                 });
